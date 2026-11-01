@@ -1,0 +1,18 @@
+digraph ObserverPanel {
+graph [layout=neato, overlap=true, splines=true, pad=0.10, bgcolor="white", outputorder=edgesfirst];
+node [shape=plain, fontname="DejaVu Sans", fontsize=12, pin=true];
+edge [color="#555555", fontcolor="#303030", fontname="DejaVu Sans", fontsize=11, arrowsize=0.8, penwidth=1.0];
+Subject [pos="110,400!",label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EEEEEE"><FONT POINT-SIZE="11">&lt;&lt;interface&gt;&gt;</FONT><BR/><B>Subject&lt;E&gt;</B></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">E extends Event</FONT></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">+subscribe(type, observer)</FONT></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">+unsubscribe(type, observer)</FONT></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">+publish(event: E)</FONT></TD></TR></TABLE>>];
+Observer [pos="345,400!",label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EEEEEE"><FONT POINT-SIZE="11">&lt;&lt;interface&gt;&gt;</FONT><BR/><B>Observer&lt;E&gt;</B></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">E extends Event</FONT></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">+onEvent(event: E)</FONT></TD></TR></TABLE>>];
+SoilSensor [pos="110,240!",label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EEEEEE"><B>SoilSensor</B></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">-events: Subject&lt;ReadingEvent&gt;</FONT></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">+moisture(zoneId, value)</FONT></TD></TR></TABLE>>];
+WeatherStation [pos="345,240!",label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EEEEEE"><B>WeatherStation</B></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">-events: Subject&lt;ReadingEvent&gt;</FONT></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">+temperature(zoneId, value)</FONT></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">+humidity(zoneId, value)</FONT></TD></TR></TABLE>>];
+SimpleSubject [pos="110,65!",label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EEEEEE"><B>SimpleSubject&lt;E&gt;</B></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">-listeners by EventType</FONT></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">CopyOnWriteArrayList</FONT></TD></TR></TABLE>>];
+MoistureAggregator [pos="345,65!",label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EEEEEE"><B>MoistureAggregator</B></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">Observer&lt;ReadingEvent&gt;</FONT></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">Subject&lt;AverageEvent&gt;</FONT></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">-output: Subject&lt;AverageEvent&gt;</FONT></TD></TR></TABLE>>];
+SoilSensor -> Subject [style=dashed, arrowhead=empty];
+WeatherStation -> Subject [style=dashed, arrowhead=empty];
+SimpleSubject -> Subject [style=dashed, arrowhead=empty];
+MoistureAggregator -> Subject [style=dashed, arrowhead=empty];
+MoistureAggregator -> Observer [style=dashed, arrowhead=empty];
+SimpleSubject -> Observer [arrowhead=vee, xlabel=""];
+MoistureAggregator -> Subject [arrowhead=vee, xlabel=""];
+}

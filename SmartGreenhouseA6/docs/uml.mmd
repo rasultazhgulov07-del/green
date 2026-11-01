@@ -1,0 +1,257 @@
+classDiagram
+direction TB
+
+class Main {
+  +main(args) void
+  -createGreenhouse() Greenhouse
+}
+class ProducerRunner {
+  -ExecutorService executor
+  +run(producers) void
+  +close() void
+}
+class ExecutorService {
+  <<interface>>
+  +submit(task) Future
+  +shutdown() void
+  +awaitTermination(timeout, unit) boolean
+}
+Main ..> ProducerRunner : creates and runs
+ProducerRunner --> ExecutorService : owns lifecycle
+
+class Event {
+  <<interface>>
+  +type() EventType
+  +zoneId() String
+}
+class EventType {
+  <<enumeration>>
+  MOISTURE
+  TEMPERATURE
+  HUMIDITY
+  AVERAGE_MOISTURE
+  INSPECTION_REPORT
+}
+class ReadingEvent {
+  <<record>>
+  +EventType type
+  +String zoneId
+  +double value
+}
+class AverageEvent {
+  <<record>>
+  +String zoneId
+  +double average
+  +int sampleCount
+}
+class InspectionEvent {
+  <<record>>
+  +String zoneId
+  +List~String~ deviceIds
+}
+Event <|.. ReadingEvent
+Event <|.. AverageEvent
+Event <|.. InspectionEvent
+Event ..> EventType : type
+
+class Subject~E~ {
+  <<interface>>
+  +subscribe(type, observer) void
+  +unsubscribe(type, observer) void
+  +publish(event) void
+}
+class Observer~E~ {
+  <<interface>>
+  +onEvent(event) void
+}
+note for Subject "E extends Event"
+note for Observer "E extends Event"
+
+class SimpleSubject~E~ {
+  -Map listeners
+  +subscribe(type, observer) void
+  +unsubscribe(type, observer) void
+  +publish(event) void
+}
+class SoilSensor {
+  -Subject~ReadingEvent~ events
+  +moisture(zoneId, value) void
+}
+class WeatherStation {
+  -Subject~ReadingEvent~ events
+  +temperature(zoneId, value) void
+  +humidity(zoneId, value) void
+}
+class MoistureAggregator {
+  -Map valuesByZone
+  -Subject~AverageEvent~ output
+  +onEvent(event) void
+  +sampleCount(zoneId) int
+  +average(zoneId) double
+}
+class FarmerDashboard {
+  -ConcurrentMap readings
+  +latest(type, zoneId) ReadingEvent
+}
+class ReadingCounter {
+  -AtomicInteger count
+  +count() int
+}
+class EventLog {
+  -ConcurrentLinkedQueue events
+  +events() List~ReadingEvent~
+}
+class IrrigationController {
+  -double moistureThreshold
+  -ConcurrentMap irrigationByZone
+  +isIrrigationOn(zoneId) boolean
+}
+class FrostAlert {
+  -double temperatureThreshold
+  -ConcurrentLinkedQueue alerts
+  +alerts() List~ReadingEvent~
+}
+class InspectionService {
+  -Map zones
+  -Visitor inspector
+  -Subject~InspectionEvent~ reports
+  -double dryThreshold
+  +onEvent(event) void
+}
+class AverageDashboard {
+  -ConcurrentHashMap latest
+  +onEvent(event) void
+  +latest(zoneId) AverageEvent
+}
+class ReportCollector {
+  -ConcurrentLinkedQueue reports
+  +onEvent(event) void
+  +reports() List~InspectionEvent~
+}
+
+Subject <|.. SimpleSubject
+Subject <|.. SoilSensor : E is ReadingEvent
+Subject <|.. WeatherStation : E is ReadingEvent
+Subject <|.. MoistureAggregator : E is AverageEvent
+SoilSensor --> Subject : events delegate
+WeatherStation --> Subject : events delegate
+MoistureAggregator --> Subject : output delegate
+SimpleSubject --> Observer : subscribers by EventType
+Observer <|.. MoistureAggregator : ReadingEvent
+Observer <|.. FarmerDashboard : ReadingEvent
+Observer <|.. ReadingCounter : ReadingEvent
+Observer <|.. EventLog : ReadingEvent
+Observer <|.. IrrigationController : ReadingEvent
+Observer <|.. FrostAlert : ReadingEvent
+Observer <|.. InspectionService : ReadingEvent
+Observer <|.. AverageDashboard : AverageEvent
+Observer <|.. ReportCollector : InspectionEvent
+Subject ..> Event : generic bound
+Observer ..> Event : generic bound
+
+class GreenhouseElement {
+  <<interface>>
+  +id() String
+  +name() String
+  +accept(visitor) R
+}
+class Greenhouse {
+  <<record>>
+  +String id
+  +String name
+  +List~Zone~ zones
+  +accept(visitor) R
+}
+class Zone {
+  <<record>>
+  +String id
+  +String name
+  +List~GreenhouseElement~ children
+  +accept(visitor) R
+}
+class Crop {
+  <<record>>
+  +String id
+  +String name
+  +double waterLitresPerDay
+  +accept(visitor) R
+}
+class Pump {
+  <<record>>
+  +String id
+  +String name
+  +double watts
+  +boolean maintenanceRequired
+  +accept(visitor) R
+}
+class Lamp {
+  <<record>>
+  +String id
+  +String name
+  +double watts
+  +boolean maintenanceRequired
+  +accept(visitor) R
+}
+class Sensor {
+  <<record>>
+  +String id
+  +String name
+  +double watts
+  +boolean maintenanceRequired
+  +accept(visitor) R
+}
+class Heater {
+  <<record>>
+  +String id
+  +String name
+  +double watts
+  +boolean maintenanceRequired
+  +accept(visitor) R
+}
+GreenhouseElement <|.. Greenhouse
+GreenhouseElement <|.. Zone
+GreenhouseElement <|.. Crop
+GreenhouseElement <|.. Pump
+GreenhouseElement <|.. Lamp
+GreenhouseElement <|.. Sensor
+GreenhouseElement <|.. Heater
+Greenhouse "1" *-- "0..*" Zone : zones
+Zone "1" *-- "0..*" GreenhouseElement : children are leaves
+
+class Visitor~R~ {
+  <<interface>>
+  +visit(Greenhouse greenhouse) R
+  +visit(Zone zone) R
+  +visit(Crop crop) R
+  +visit(Pump pump) R
+  +visit(Lamp lamp) R
+  +visit(Sensor sensor) R
+  +visit(Heater heater) R
+}
+class PowerVisitor
+class InventoryVisitor {
+  -Map counts
+  -double waterLitresPerDay
+  +getTotalElements() int
+  +getCounts() Map
+}
+class MaintenanceVisitor
+class JsonExportVisitor
+class WaterDemandVisitor
+Visitor <|.. PowerVisitor : R is Double
+Visitor <|.. InventoryVisitor : R is Void
+Visitor <|.. MaintenanceVisitor : R is List of GreenhouseElement
+Visitor <|.. JsonExportVisitor : R is String
+Visitor <|.. WaterDemandVisitor : R is Double
+GreenhouseElement ..> Visitor : accepts Visitor of R
+note for GreenhouseElement "accept is generic in R; each concrete accept calls visitor.visit(this)"
+note for Visitor "Seven concrete overloads; each visitor traverses containers through child.accept(this)"
+
+InspectionService ..> Zone : affectedZone.accept(inspector) only
+InspectionService --> Visitor : injected inspector returns list of elements
+InspectionService --> Subject : reports with InspectionEvent
+InspectionService ..> InspectionEvent : creates immutable report
+Main ..> SoilSensor : creates and wires
+Main ..> WeatherStation : creates and wires
+Main ..> Greenhouse : creates immutable tree
+Main ..> InspectionService : injects dependencies

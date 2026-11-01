@@ -1,0 +1,34 @@
+digraph VisitorPanel {
+graph [layout=neato, overlap=true, splines=true, pad=0.10, bgcolor="white", outputorder=edgesfirst];
+node [shape=plain, fontname="DejaVu Sans", fontsize=12, pin=true];
+edge [color="#555555", fontcolor="#303030", fontname="DejaVu Sans", fontsize=11, arrowsize=0.8, penwidth=1.0];
+GreenhouseElement [pos="235,550!",label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EEEEEE"><FONT POINT-SIZE="11">&lt;&lt;interface&gt;&gt;</FONT><BR/><B>GreenhouseElement</B></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">+accept&lt;R&gt;(Visitor&lt;R&gt;): R</FONT></TD></TR></TABLE>>];
+Greenhouse [pos="100,450!",label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EEEEEE"><FONT POINT-SIZE="11">&lt;&lt;record&gt;&gt;</FONT><BR/><B>Greenhouse</B></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">zones: List&lt;Zone&gt;</FONT></TD></TR></TABLE>>];
+Zone [pos="355,450!",label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EEEEEE"><FONT POINT-SIZE="11">&lt;&lt;record&gt;&gt;</FONT><BR/><B>Zone</B></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">children: List&lt;</FONT></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">GreenhouseElement&gt;</FONT></TD></TR></TABLE>>];
+Crop [pos="40,355!",label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EEEEEE"><B>Crop</B></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">+accept(...)</FONT></TD></TR></TABLE>>];
+Pump [pos="135,355!",label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EEEEEE"><B>Pump</B></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">+accept(...)</FONT></TD></TR></TABLE>>];
+Lamp [pos="230,355!",label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EEEEEE"><B>Lamp</B></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">+accept(...)</FONT></TD></TR></TABLE>>];
+Sensor [pos="325,355!",label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EEEEEE"><B>Sensor</B></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">+accept(...)</FONT></TD></TR></TABLE>>];
+Heater [pos="420,355!",label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EEEEEE"><B>Heater</B></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">+accept(...)</FONT></TD></TR></TABLE>>];
+Greenhouse -> GreenhouseElement [style=dashed, arrowhead=empty];
+Zone -> GreenhouseElement [style=dashed, arrowhead=empty];
+Crop -> GreenhouseElement [style=dashed, arrowhead=empty];
+Pump -> GreenhouseElement [style=dashed, arrowhead=empty];
+Lamp -> GreenhouseElement [style=dashed, arrowhead=empty];
+Sensor -> GreenhouseElement [style=dashed, arrowhead=empty];
+Heater -> GreenhouseElement [style=dashed, arrowhead=empty];
+Greenhouse -> Zone [dir=both, arrowtail=diamond, arrowhead=none, taillabel="1", headlabel="0..*", labeldistance=1.8];
+Zone -> GreenhouseElement [dir=both, arrowtail=diamond, arrowhead=none, taillabel="1", headlabel="0..*", labeldistance=1.8];
+Visitor [pos="235,225!",label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EEEEEE"><FONT POINT-SIZE="11">&lt;&lt;interface&gt;&gt;</FONT><BR/><B>Visitor&lt;R&gt;</B></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">+visit(Greenhouse): R</FONT></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">+visit(Zone): R</FONT></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">+visit(Crop): R</FONT></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">+visit(Pump): R</FONT></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">+visit(Lamp): R</FONT></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">+visit(Sensor): R</FONT></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">+visit(Heater): R</FONT></TD></TR></TABLE>>];
+GreenhouseElement -> Visitor [style=dashed, arrowhead=vee, ];
+PowerVisitor [pos="70,90!",label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EEEEEE"><B>PowerVisitor</B></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">R = Double</FONT></TD></TR></TABLE>>];
+InventoryVisitor [pos="225,90!",label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EEEEEE"><B>InventoryVisitor</B></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">R = Void</FONT></TD></TR></TABLE>>];
+MaintenanceVisitor [pos="395,90!",label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EEEEEE"><B>MaintenanceVisitor</B></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">R = List&lt;</FONT></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">GreenhouseElement&gt;</FONT></TD></TR></TABLE>>];
+JsonExportVisitor [pos="135,20!",label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EEEEEE"><B>JsonExportVisitor</B></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">R = String</FONT></TD></TR></TABLE>>];
+WaterDemandVisitor [pos="335,20!",label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EEEEEE"><B>WaterDemandVisitor</B></TD></TR><TR><TD ALIGN="LEFT" CELLPADDING="3"><FONT POINT-SIZE="11">R = Double</FONT></TD></TR></TABLE>>];
+PowerVisitor -> Visitor [style=dashed, arrowhead=empty];
+InventoryVisitor -> Visitor [style=dashed, arrowhead=empty];
+MaintenanceVisitor -> Visitor [style=dashed, arrowhead=empty];
+JsonExportVisitor -> Visitor [style=dashed, arrowhead=empty];
+WaterDemandVisitor -> Visitor [style=dashed, arrowhead=empty];
+}

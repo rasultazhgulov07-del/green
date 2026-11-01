@@ -1,0 +1,16 @@
+Smart Greenhouse - Assignment 6
+Producer threads configured: 4
+Readings received: 9
+Readings logged: 9
+Zone A average moisture: 30.0
+Zone A irrigation on: false
+Frost alerts: 1
+Total rated power: 735.0 W
+Inventory elements: 12
+Inventory counts: {Greenhouse=1, Zone=2, Crop=2, Pump=2, Lamp=2, Sensor=2, Heater=1}
+Crop water demand: 30.0 L/day
+Water demand visitor: 30.0 L/day
+Devices needing maintenance: 4
+Inspection zone-a: [pump-a, sensor-a, heater-a]
+JSON: {"type":"greenhouse","id":"greenhouse-1","name":"AITU Smart Greenhouse","children":[{"type":"zone","id":"zone-a","name":"Tomatoes","children":[{"type":"crop","id":"crop-a","name":"Tomatoes","waterLitresPerDay":10.0},{"type":"pump","id":"pump-a","name":"Water pump A","watts":100.0,"maintenanceRequired":true},{"type":"lamp","id":"lamp-a","name":"Grow lamp A","watts":50.0,"maintenanceRequired":false},{"type":"sensor","id":"sensor-a","name":"Soil probe A","watts":5.0,"maintenanceRequired":true},{"type":"heater","id":"heater-a","name":"Greenhouse heater A","watts":300.0,"maintenanceRequired":true}]},{"type":"zone","id":"zone-b","name":"Cucumbers","children":[{"type":"crop","id":"crop-b","name":"Cucumbers","waterLitresPerDay":20.0},{"type":"pump","id":"pump-b","name":"Water pump B","watts":200.0,"maintenanceRequired":false},{"type":"lamp","id":"lamp-b","name":"Grow lamp B","watts":75.0,"maintenanceRequired":true},{"type":"sensor","id":"sensor-b","name":"Soil probe B","watts":5.0,"maintenanceRequired":false}]}]}
+All producers finished; executor terminated.
